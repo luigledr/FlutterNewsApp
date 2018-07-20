@@ -30,10 +30,18 @@ class Repository {
     }
 
     for (var cache in caches) {
-      cache.addItem(item);
+      if (cache is Source && (cache as Source) != source) {
+        cache.addItem(item);
+      }
     }
 
     return item;
+  }
+
+  Future<Null> clearCache() async {
+    for (final cache in caches) {
+      await cache.clearCache();
+    }
   }
 }
 
@@ -44,4 +52,5 @@ abstract class Source {
 
 abstract class Cache {
   Future<int> addItem(ItemModel item);
+  Future<int> clearCache();
 }
